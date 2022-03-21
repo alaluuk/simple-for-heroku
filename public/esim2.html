@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>JavaScript Array</h1>
+    <p>
+        <button onclick="showFnames()">fnames</button>
+        <button onclick="showNames()">names</button>
+        <button onclick="showBooks()">books</button>
+    </p>
+    <p>
+        <button onclick="printFnames()">Näytä fnamet</button>
+        <button onclick="showBooksList()">Kirjat listana</button>
+        <button onclick="showBooksTable()">Kirjat taulukkona</button>
+        <button onclick="showBooksNewTable()">Kirjat taulukkona v2</button>
+    </p>
+    <p id="fnameslist"></p>
+    <p id="bookslist"></p>
+    <table border="1">
+        <thead>
+            <tr><th>Name</th><th>Tekijä</th><th>ISBN</th></tr>
+        </thead>
+        <tbody id="booksbody"></tbody>
+    </table>
+    <p id="newbooks"></p>
+</body>
+<script>
+    const fnames=["Teppo","Aino","Liisa"];
+    const names=[
+        ["Teppo","Testi"],
+        ["Aino","Joki"],
+        ["Liisa","Virta"]
+    ];
+    //Assosiative array
+    const books=[
+        {"id_book":1,"name":'Python',"author":'Artem',"isbn":'123-456'},
+        {"id_book":2,"name":'SQL',"author":'Hovi',"isbn":'345-888'}
+    ];
+
+    function showFnames(){
+        console.log("koko taulukko : "+fnames);
+        console.log("eka nimi : "+fnames[0]);
+    }
+    function showNames(){
+        console.log(names);
+        console.log("koko taulukko : "+names);
+        console.log("Toisen rivin etunimi : "+names[1][0]);
+    }
+    function showBooks(){
+        console.log(books);
+    }
+
+    function printFnames(){
+        let row="<ul>";
+        fnames.map(fname=>{
+            row+="<li>"+fname+"</li>";
+        });
+        row+="</ul>";
+        console.log(row);
+        document.getElementById("fnameslist").innerHTML=row;
+    }
+
+    function showBooksList(){
+        let row="<ul>";
+        books.map(book=>{
+            row+="<li key="+book.id_book+">"+book.name+", "+book.author+", "+book.isbn+"</li>";
+        });
+        row+="</ul>";
+        console.log(row);
+        document.getElementById("bookslist").innerHTML=row;
+    }
+
+    function showBooksTable(){
+        let row="";
+        books.map(book=>{
+            row+="<tr key="+book.id_book+"><td>"+book.name+"</td><td> "+book.author+"</td><td> "+book.isbn+"</td></tr>";
+        });
+        console.log(row);
+        document.getElementById("booksbody").innerHTML=row; 
+    }
+
+    function showBooksNewTable(){
+        let row=`<table border='1'>
+        <thead>
+            <tr><th>Name</th><th>Tekijä</th><th>ISBN</th></tr>
+        </thead>
+        <tbody>`;
+        books.map(book=>{
+            row+="<tr key="+book.id_book+"><td>"+book.name+"</td><td> "+book.author+"</td><td> "+book.isbn+"</td></tr>";
+        });
+        row+=`</tbody>
+        </table>`;
+        console.log(row);
+        document.getElementById("newbooks").innerHTML=row; 
+    }
+</script>
+</html>
