@@ -10,30 +10,68 @@
 
 <body>
     <h1>Kirjat</h1>
-    <button onclick="getAllBooks()">Kaikki kirjat</button>
+    <label for="username">USERNAME</label> <br>
+    <input type="text" id="username" placeholder="tunnus"> <br>
+    <label for="password">PASSWORD</label> <br>
+    <input type="text" id="password" placeholder="salasana"> <br>
+    <button onclick="login()">Kirjaudu</button>
+    <hr>
+    <button onclick="getAllBooks()" id="btnBook" hidden>Kaikki kirjat</button>
     <p id="allbooks"></p>
 </body>
 <script>
+    function login() {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+        console.log(username);
+        console.log(password);
+
+        var url = "http://localhost:3001/login/" + username + "/" + password;
+        var loginResponse = new XMLHttpRequest();
+        loginResponse.onreadystatechange = function () {
+            if (loginResponse.readyState == 4 && loginResponse.status == 200) {
+                let result = this.response;
+                console.log(result);
+                if (result == 'true') {
+                    window.sessionStorage.setItem('username', username);
+                    window.sessionStorage.setItem('password', password);
+                    document.getElementById("btnBook").hidden=false;
+                }
+                else {
+                    window.sessionStorage.clear();
+                    document.getElementById("btnBook").hidden=true;
+                }
+            }
+            else {
+                // console.log("error");
+            }
+        };
+        loginResponse.open('GET', url);
+        loginResponse.send();
+    }
     function getAllBooks() {
         //console.log("funktiota kutsuttu");
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 console.log(this.responseText);
-                let books=JSON.parse(this.response);
-                let row="<ul>";
-                    books.map(book=>{
-                        row+="<li>"+book.name+"</li>"
-                    });
-                row+="</ul>";
-                document.getElementById("allbooks").innerHTML=row;
+                let books = JSON.parse(this.response);
+                let row = "<ul>";
+                books.map(book => {
+                    row += "<li>" + book.name + "</li>"
+                });
+                row += "</ul>";
+                document.getElementById("allbooks").innerHTML = row;
             }
             else {
                 console.log("Can not get data");
             }
         }
-        //xhttp.open("GET", "http://localhost:3001/book");
-        xhttp.open("GET", "https://bcamp-simple-backend.herokuapp.com/book");
+        xhttp.open("GET", "http://localhost:3001/book");
+        //xhttp.open("GET", "https://bcamp-simple-backend.herokuapp.com/book");
+        userName = window.sessionStorage.getItem('username');
+        passWord = window.sessionStorage.getItem('password');
+        xhttp.setRequestHeader('Authorization', "Basic " + btoa(userName + ":" + passWord));
         xhttp.send();
     }
 </script>
